@@ -13,12 +13,10 @@ const getAllData = async (req, res) => {
 const postData = async (req, res) => {
   try {
     const { ph, temperature, amonia, tds } = req.body;
-    // const newData = await SensorData.create({ ph, temperature, amonia, tds });
-    console.log({ ph, temperature, amonia, tds });
+    const newData = await SensorData.create({ ph, temperature, amonia, tds });
+    console.log(newData);
 
-    res
-      .status(201)
-      .json({ success: true, data: { ph, temperature, amonia, tds } });
+    res.status(201).json({ success: true, data: newData });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
