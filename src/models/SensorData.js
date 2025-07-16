@@ -19,7 +19,7 @@ const SensorSchema = new mongoose.Schema({
   },
   classification: {
     type: String,
-    enum: ["Aman", "Waspada", "Berbahaya"],
+    enum: ["Aman", "Waspada", "Berbahaya", "Belum diklasifikasi"],
     default: "Belum diklasifikasi",
   },
   timestamp: {
