@@ -2,7 +2,19 @@ const SensorData = require("../models/SensorData");
 
 const getAllData = async (req, res) => {
   try {
-    const data = await SensorData.find().sort({ timestamp: -1 });
+    const { hours } = req.params;
+
+    let filter = {};
+
+    if (hours) {
+      const parsedHours = parseInt(hours);
+      if (!isNaN(parsedHours)) {
+        const startTime = new Date(Date.now() - parsedHours * 60 * 60 * 1000);
+        filter = { timestamp: { $gte: startTime } };
+      }
+    }
+
+    const data = await SensorData.find(filter).sort({ timestamp: -1 });
 
     res.status(200).json({ success: true, count: data.length, data });
   } catch (error) {
@@ -12,8 +24,14 @@ const getAllData = async (req, res) => {
 
 const postData = async (req, res) => {
   try {
-    const { ph, temperature, amonia, tds } = req.body;
-    const newData = await SensorData.create({ ph, temperature, amonia, tds });
+    const { ph, temperature, amonia, tds, classification } = req.body;
+    const newData = await SensorData.create({
+      ph,
+      temperature,
+      amonia,
+      tds,
+      classification,
+    });
     console.log(newData);
 
     res.status(201).json({ success: true, data: newData });
