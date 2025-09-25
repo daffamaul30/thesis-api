@@ -4,6 +4,7 @@ const { getAllData, postData } = require("../controllers/sensorController");
 const router = express.Router();
 
 router.get("/", getAllData);
+router.get("/:hours", getAllData);
 router.post("/", postData);
 
 module.exports = router;
