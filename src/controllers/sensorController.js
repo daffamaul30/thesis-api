@@ -3,14 +3,20 @@ const SensorData = require("../models/SensorData");
 const getAllData = async (req, res) => {
   try {
     const { hours } = req.params;
-
     let filter = {};
 
     if (hours) {
       const parsedHours = parseInt(hours);
       if (!isNaN(parsedHours)) {
-        const startTime = new Date(Date.now() - parsedHours * 60 * 60 * 1000);
-        filter = { timestamp: { $gte: startTime } };
+        // cari data terbaru
+        const latestData = await SensorData.findOne().sort({ timestamp: -1 });
+
+        if (latestData) {
+          const startTime = new Date(
+            latestData.timestamp.getTime() - parsedHours * 60 * 60 * 1000
+          );
+          filter = { timestamp: { $gte: startTime } };
+        }
       }
     }
 
