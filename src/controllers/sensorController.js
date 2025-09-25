@@ -6,7 +6,7 @@ const getAllData = async (req, res) => {
     let filter = {};
 
     if (hours) {
-      const parsedHours = parseInt(hours);
+      const parsedHours = parseFloat(hours); // <-- ubah ke float
       if (!isNaN(parsedHours)) {
         // cari data terbaru
         const latestData = await SensorData.findOne().sort({ timestamp: -1 });
