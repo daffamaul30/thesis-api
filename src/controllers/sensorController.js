@@ -28,6 +28,23 @@ const getAllData = async (req, res) => {
   }
 };
 
+const getLatestData = async (req, res) => {
+  try {
+    // cari 1 data terbaru berdasarkan timestamp
+    const latestData = await SensorData.findOne().sort({ timestamp: -1 });
+
+    if (!latestData) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Data not found" });
+    }
+
+    res.status(200).json({ success: true, data: latestData });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 const postData = async (req, res) => {
   try {
     const { ph, temperature, amonia, tds, classification } = req.body;
@@ -49,4 +66,5 @@ const postData = async (req, res) => {
 module.exports = {
   getAllData,
   postData,
+  getLatestData
 };
